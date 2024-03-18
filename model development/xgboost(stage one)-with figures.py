@@ -8,12 +8,11 @@ from sklearn.model_selection import cross_val_score,KFold
 from xgboost import XGBRegressor
 from sklearn.linear_model import LinearRegression
 
-# 从train_data.csv中读取训练数据
+# read datasets
 train_df = pd.read_csv('SR_train.csv')
 X_train = train_df[['infP','infC','infS','MLSS','MLVSS','VSS/TSS','ana-time']].values
 y_train = train_df['SR'].values
 
-# 从test_data.csv中读取测试数据
 test_df = pd.read_csv('SR_test.csv')
 X_test = test_df[['infP','infC','infS','MLSS','MLVSS','VSS/TSS','ana-time']].values
 y_test = test_df['SR'].values
@@ -157,7 +156,7 @@ ax_histx.set_ylim(-5, 115)
 r2_train = np.round(r2_score(y_train, y_train_pred), 3)
 r2_test = np.round(r2_score(y_test, y_test_pred), 3)
 
-# text
+# adding text
 ax.text(60, 15, f'Train R\u00b2: {r2_train}\nTest R\u00b2: {r2_test}\nTrain RMSE: {RMSE_train}\nTest RMSE: {RMSE_test}',fontsize=15)
 ax.text(80, 95, f'y=x',fontsize=20, color='blue',alpha=0.8)
 ax.text(80, 40, f'XGB',fontsize=18)
