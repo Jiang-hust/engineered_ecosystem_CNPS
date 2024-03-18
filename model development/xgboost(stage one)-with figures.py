@@ -27,19 +27,12 @@ model.fit(X_train,y_train)
 y_test_pred=model.predict(X_test)
 y_train_pred=model.predict(X_train)
 
-
 RMSE_test=np.round(mean_squared_error(y_test,y_test_pred)**0.5, 2)
 RMSE_train=np.round(mean_squared_error(y_train,y_train_pred)**0.5, 2)
 
 print("R2",r2_score(y_test,y_test_pred))
 print("R2-train",model.score(X_train,y_train))
 print("R2-test",model.score(X_test,y_test))
-print("MSE",mean_squared_error(y_test,y_test_pred))
-print("RMSE",mean_squared_error(y_test,y_test_pred)**0.5)
-print("MAE",mean_absolute_error(y_test,y_test_pred))
-print(model.feature_importances_)
-print(score_val)
-print(score_val.mean())
 
 def scatter_hist(x, y, ax, ax_histx, ax_histy):
     #set colors
