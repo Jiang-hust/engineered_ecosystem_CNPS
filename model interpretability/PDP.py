@@ -1,4 +1,4 @@
-#set stage one regression as samples
+#set stage one regression as the sample
 
 import pandas as pd
 import matplotlib.pyplot as plt
