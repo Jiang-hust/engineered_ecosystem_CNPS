@@ -37,7 +37,7 @@ for i in features:
     ax  = plt.subplot(111)
 
     plot_x = pd.Series(pdp['values'][0]).rename('x')
-    plot_i = pdp['individual'] #获取每个样本的ice数组
+    plot_i = pdp['individual'] 
     plot_y = pdp['average'][0]
     tck = splrep(plot_x, plot_y, s=30)
     xnew = np.linspace(plot_x.min(),plot_x.max(),300)
