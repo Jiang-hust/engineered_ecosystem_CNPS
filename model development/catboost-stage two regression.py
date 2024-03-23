@@ -31,5 +31,5 @@ RMSE_test=np.round(mean_squared_error(y_test,y_test_pred)**0.5, 2)
 RMSE_train=np.round(mean_squared_error(y_train,y_train_pred)**0.5, 2)
 
 print("R2",r2_score(y_test,y_test_pred))
-print("R2-训练集",model.score(X_train,y_train))
-print("R2-测试集",model.score(X_test,y_test))
+print("R2-train",model.score(X_train,y_train))
+print("R2-test",model.score(X_test,y_test))
