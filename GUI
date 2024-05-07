@@ -1,1 +1,205 @@
+#package: tkinter, joblib, sklearn, xgboost, catboost, pandas, numpy, scipy
+#conda environment
+#convert to exe: pyinstaller -F -w GUI.py
 
+import tkinter as tk
+import joblib
+
+# create the GUI window
+window = tk.Tk()
+window.title('DS-EBPR Performance Prediction')
+window.configure(bg='lightblue')
+Title=tk.Label(window, text='DS-EBPR Performance Prediction',font=("Arial", 15, "bold"))
+Title.configure(bg='lightblue')
+Title.grid(row=0, column=3)
+
+Title_1=tk.Label(window, text='Stage_One Prediction',font=("Arial", 14, "bold"))
+Title_1.configure(bg='white')
+Title_1.grid(row=1, column=3)
+
+Title_2=tk.Label(window, text='Stage_Two Prediction',font=("Arial", 14, "bold"))
+Title_2.configure(bg='white')
+Title_2.grid(row=12, column=3)
+
+Para_1=tk.Label(window, text='Water parameters:',font=("Arial", 12, "bold"))
+Para_1.configure(bg='lightblue')
+Para_1.grid(row=3, column=0)
+Para_2=tk.Label(window, text='Operational conditions:',font=("Arial", 12, "bold"))
+Para_2.configure(bg='lightblue')
+Para_2.grid(row=5, column=0)
+Para_3=tk.Label(window, text='Sludge properties:',font=("Arial", 12, "bold"))
+Para_3.configure(bg='lightblue')
+Para_3.grid(row=7, column=0)
+Para_4=tk.Label(window, text='Anoxic parameters:',font=("Arial", 12, "bold"))
+Para_4.configure(bg='lightblue')
+Para_4.grid(row=14, column=0)
+
+label1 = tk.Label(window, text='Please enter the infC (mgC/L):',font=("Arial",12))
+label1.configure(bg='lightblue')
+label1.grid(row=3, column=1)
+infC = tk.Entry(window)
+infC.grid(row=3, column=2)
+
+label2 = tk.Label(window, text='Please enter the infS (mgS/L):',font=("Arial",12))
+label2.grid(row=3, column=3)
+label2.configure(bg='lightblue')
+infS = tk.Entry(window)
+infS.grid(row=3, column=4)
+
+label3 = tk.Label(window, text='Please enter the infP (mgP/L):',font=("Arial",12))
+label3.grid(row=3, column=5)
+label3.configure(bg='lightblue')
+infP = tk.Entry(window)
+infP.grid(row=3, column=6)
+
+label4 = tk.Label(window, text='Please enter the ana_time (h):',font=("Arial",12))
+label4.grid(row=5, column=1)
+label4.configure(bg='lightblue')
+ana_time = tk.Entry(window)
+ana_time.grid(row=5, column=2)
+
+label5 = tk.Label(window, text='Please enter the pH:',font=("Arial",12))
+label5.grid(row=5, column=3)
+label5.configure(bg='lightblue')
+pH = tk.Entry(window)
+pH.grid(row=5, column=4)
+
+label6 = tk.Label(window, text='Please enter the MLSS(mg/L):',font=("Arial",12))
+label6.grid(row=7, column=1)
+label6.configure(bg='lightblue')
+MLSS = tk.Entry(window)
+MLSS.grid(row=7, column=2)
+
+label7 = tk.Label(window, text='Please enter the MLVSS(mg/L):',font=("Arial",12))
+label7.grid(row=7, column=3)
+label7.configure(bg='lightblue')
+MLVSS = tk.Entry(window)
+MLVSS.grid(row=7, column=4)
+
+label8 = tk.Label(window, text='Please enter the MLVSS/MLSS:',font=("Arial",12))
+label8.grid(row=7, column=5)
+label8.configure(bg='lightblue')
+MLVSS_MLSS = tk.Entry(window)
+MLVSS_MLSS.grid(row=7, column=6)
+
+SR=tk.Entry(window)
+SR.grid(row=9, column=4)
+
+# load stage one prediction model '.pkl'
+model = joblib.load('yourpath\stage_one_model.pkl')
+
+# define the function of predicting SR
+def predict():
+    # handling missing values
+    infP_value = float(infP.get()) if infP.get() else 10.9
+    infC_value = float(infC.get()) if infC.get() else 74.96
+    infS_value = float(infS.get()) if infS.get() else 171.35
+    MLSS_value = float(MLSS.get()) if MLSS.get() else 8.20
+    MLVSS_value = float(MLVSS.get()) if MLVSS.get() else 4.65
+    MLVSS_MLSS_value = float(MLVSS_MLSS.get()) if MLVSS_MLSS.get() else 0.60
+    ana_time_value = float(ana_time.get()) if ana_time.get() else 5.7
+    pH_value = float(pH.get()) if pH.get() else 7.61
+
+    data = [infP_value,infC_value, infS_value,
+            MLSS_value, MLVSS_value,MLVSS_MLSS_value,
+            ana_time_value,pH_value]
+    result = model.predict([data])
+    result = float(result)  
+    SR.delete(0, tk.END)
+    SR.insert(0, str(round(result, 2)))
+    
+
+# adding buttons
+button = tk.Button(window, text='Predicted Sulfate Reduction', command=predict,font=("Arial", 12, "bold"))
+button.configure(bg='yellow')
+button.grid(row=9, column=3)
+
+# load stage two model
+model_P = joblib.load('yourpath\stage_two_model.pkl')
+
+label9 = tk.Label(window, text='Please enter the ano_time (h):',font=("Arial",12))
+label9.grid(row=14, column=1)
+label9.configure(bg='lightblue')
+ano_time = tk.Entry(window)
+ano_time.grid(row=14, column=2)
+
+label10 = tk.Label(window, text='Please enter the infN (mgN/L):',font=("Arial",12))
+label10.grid(row=14, column=5)
+label10.configure(bg='lightblue')
+infN = tk.Entry(window)
+infN.grid(row=14, column=6)
+
+label11 = tk.Label(window, text='Please enter the Predicted_SR (mgS/L):',font=("Arial",12))
+label11.grid(row=14, column=3)
+label11.configure(bg='lightblue')
+Predicted_SR = tk.Entry(window)
+Predicted_SR.grid(row=14, column=4)
+
+Predicted_P=tk.Entry(window)
+Predicted_P.grid(row=18, column=4)
+
+# define the function to predict P removal
+def predict():
+    infP_value_P = float(infP.get()) if infP.get() else 10.91
+    infN_value_P = float(infN.get()) if infN.get() else 38.77
+    infC_value_P = float(infC.get()) if infC.get() else 74.53
+    infS_value_P = float(infS.get()) if infS.get() else 171.80
+    MLSS_value_P = float(MLSS.get()) if MLSS.get() else 8.22
+    MLVSS_value_P = float(MLVSS.get()) if MLVSS.get() else 4.55
+    MLVSS_MLSS_value_P = float(MLVSS_MLSS.get()) if MLVSS_MLSS.get() else 0.59
+    ana_time_value_P = float(ana_time.get()) if ana_time.get() else 6.10
+    ano_time_value_P = float(ano_time.get()) if ano_time.get() else 6.18
+    pH_value_P = float(pH.get()) if pH.get() else 7.62
+
+    data = [infP_value_P,infN_value_P,infC_value_P, infS_value_P,
+            MLSS_value_P, MLVSS_value_P,MLVSS_MLSS_value_P,
+            ana_time_value_P,ano_time_value_P,pH_value_P,float(Predicted_SR.get())]
+    result_P = model_P.predict([data])
+    result_P = float(result_P) 
+    Predicted_P.delete(0, tk.END)
+    Predicted_P.insert(0, str(round(result_P, 2)))
+
+# adding buttons
+button_P = tk.Button(window, text='Predicted P Removal Efficiency/%', command=predict,font=("Arial", 12, "bold"))
+button_P.configure(bg='yellow')
+button_P.grid(row=18, column=3)
+
+#insert white palce for beauty
+white_2=tk.Label(window, text='    ')
+white_2.configure(bg='lightblue')
+white_2.grid(row=2, column=1)
+white_4=tk.Label(window, text='    ')
+white_4.configure(bg='lightblue')
+white_4.grid(row=4, column=1)
+white_6=tk.Label(window, text='    ')
+white_6.configure(bg='lightblue')
+white_6.grid(row=6, column=1)
+white_8=tk.Label(window, text='    ')
+white_8.configure(bg='lightblue')
+white_8.grid(row=8, column=1)
+white_10=tk.Label(window, text='    ')
+white_10.configure(bg='lightblue')
+white_10.grid(row=10, column=1)
+white_12=tk.Label(window, text='    ')
+white_12.grid(row=12, column=1)
+white_12.configure(bg='lightblue')
+white_13=tk.Label(window, text='    ')
+white_13.configure(bg='lightblue')
+white_13.grid(row=13, column=1)
+white_15=tk.Label(window, text='    ')
+white_15.configure(bg='lightblue')
+white_15.grid(row=15, column=1)
+white_16=tk.Label(window, text='    ')
+white_16.configure(bg='lightblue')
+white_16.grid(row=16, column=1)
+white_18=tk.Label(window, text='    ')
+white_18.configure(bg='lightblue')
+white_18.grid(row=18, column=1)
+white_20=tk.Label(window, text='    ')
+white_20.configure(bg='lightblue')
+white_20.grid(row=20, column=1)
+white_22=tk.Label(window, text='    ')
+white_22.configure(bg='lightblue')
+white_22.grid(row=22, column=1)
+
+window.mainloop()
